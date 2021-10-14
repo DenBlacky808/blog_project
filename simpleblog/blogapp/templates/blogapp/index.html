@@ -1,0 +1,21 @@
+{% extends 'blogapp/base.html' %}
+{% load static %}
+
+{% block title %}
+<!--{{ title|title }}-->
+{% endblock %}
+
+{% block menu %}
+    <div class="hero-white">
+        <div class="header clearfix">
+            {% include 'blogapp/inc_menu.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% for post in posts %}
+    {{ post.title }}
+    {{ post.user_post }}
+    {% endfor %}
+{% endblock %}
