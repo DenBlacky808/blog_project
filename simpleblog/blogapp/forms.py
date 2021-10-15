@@ -3,6 +3,8 @@ from blogapp.models import Post
 
 
 class PostForm(forms.ModelForm):
+    # user_id = forms.IntegerField(widget=forms.HiddenInput(), initial=self.)
+
     class Meta:
         model = Post
         fields = ['title', 'user_post', 'user_id']

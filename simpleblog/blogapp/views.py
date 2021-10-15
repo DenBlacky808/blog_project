@@ -1,16 +1,9 @@
-from django.contrib.auth.decorators import user_passes_test
-from django.http import request, HttpResponseForbidden, Http404, HttpResponse
-from django.utils.decorators import method_decorator
+from django.http import Http404
 from django.views.generic import ListView
-from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.urls import reverse, reverse_lazy
-from django.shortcuts import HttpResponseRedirect
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from blogapp.models import Post
-
-from blogapp.forms import PostForm
 
 
 class PostListView(ListView):
@@ -23,9 +16,15 @@ class PostListView(ListView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    form_class = PostForm
     template_name = 'blogapp/category_update.html'
+    fields = ['title', 'user_post']
     success_url = reverse_lazy('blog:categories')
+
+    def form_valid(self, form):
+        form.instance = form.save(commit=False)
+        form.instance.user_id = self.request.user
+        form.instance.save()
+        return super(PostCreateView, self).form_valid(form)
 
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
